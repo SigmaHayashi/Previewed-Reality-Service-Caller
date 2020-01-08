@@ -165,7 +165,7 @@ public class RosSocketClient : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		if (!Main.FinishReadConfig()) {
+		if (!Main.IsFinishReadConfig()) {
 			return;
 		}
 		else {
