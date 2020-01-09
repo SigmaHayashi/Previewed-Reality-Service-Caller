@@ -111,12 +111,12 @@ public class MainCanvasManager : MonoBehaviour {
 				if (ServiceCallingManager.CheckAbort()) {
 					Main.MyConsole_Add("Abort");
 					ServiceCallingManager.FinishAccess();
-					calling_grasp = false;
+					calling_moveandgrasp = false;
 				}
 				if (ServiceCallingManager.CheckSuccess()) {
 					Main.MyConsole_Add(ServiceCallingManager.GetResponceJson());
 					ServiceCallingManager.FinishAccess();
-					calling_grasp = false;
+					calling_moveandgrasp = false;
 				}
 			}
 		}
