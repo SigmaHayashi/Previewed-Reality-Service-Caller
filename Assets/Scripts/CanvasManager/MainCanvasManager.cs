@@ -15,6 +15,7 @@ public class MainCanvasManager : MonoBehaviour {
 	// UI
 	private Button CallService_Move_Button;
 	private Button CallService_Grasp_Button;
+	private Button CallService_MoveAndGrasp_Button;
 
 	// Startが終わったかどうか
 	private bool finish_start = false;
@@ -24,6 +25,7 @@ public class MainCanvasManager : MonoBehaviour {
 	private ServiceCallingManager ServiceCallingManager;
 	private bool calling_move = false;
 	private bool calling_grasp = false;
+	private bool calling_moveandgrasp = false;
 
 
 	/**************************************************
@@ -42,8 +44,10 @@ public class MainCanvasManager : MonoBehaviour {
 		// UIを取得・設定
 		CallService_Move_Button = GameObject.Find("Main System/Main Canvas/Vertical/Vertical/Move/Button").GetComponent<Button>();
 		CallService_Grasp_Button = GameObject.Find("Main System/Main Canvas/Vertical/Vertical/Grasp/Button").GetComponent<Button>();
+		CallService_MoveAndGrasp_Button = GameObject.Find("Main System/Main Canvas/Vertical/Vertical/Move and Grasp/Button").GetComponent<Button>();
 		CallService_Move_Button.onClick.AddListener(StartCallServiceMove);
 		CallService_Grasp_Button.onClick.AddListener(StartCallServiceGrasp);
+		CallService_MoveAndGrasp_Button.onClick.AddListener(StartCallServiceMoveAndGrasp);
 
 		ServiceCallingManager = GameObject.Find("Ros Socket Client").GetComponent<ServiceCallingManager>();
 
@@ -95,17 +99,44 @@ public class MainCanvasManager : MonoBehaviour {
 				}
 			}
 		}
+
+		if (calling_moveandgrasp) {
+			if (ServiceCallingManager.IsConnected() && !ServiceCallingManager.CheckWaitAnything()) {
+				IEnumerator coroutine = ServiceCallingManager.CallServiceToMoveAndGrasp();
+				StartCoroutine(coroutine);
+				Main.MyConsole_Add("Move and Grasp");
+			}
+
+			if (ServiceCallingManager.CheckWaitAnything()) {
+				if (ServiceCallingManager.CheckAbort()) {
+					Main.MyConsole_Add("Abort");
+					ServiceCallingManager.FinishAccess();
+					calling_grasp = false;
+				}
+				if (ServiceCallingManager.CheckSuccess()) {
+					Main.MyConsole_Add(ServiceCallingManager.GetResponceJson());
+					ServiceCallingManager.FinishAccess();
+					calling_grasp = false;
+				}
+			}
+		}
 	}
 
 	void StartCallServiceMove() {
-		if(!calling_move && !calling_grasp) {
+		if(!calling_move && !calling_grasp && !calling_moveandgrasp) {
 			calling_move = true;
 		}
 	}
 
 	void StartCallServiceGrasp() {
-		if (!calling_move && !calling_grasp) {
+		if (!calling_move && !calling_grasp && !calling_moveandgrasp) {
 			calling_grasp = true;
+		}
+	}
+
+	void StartCallServiceMoveAndGrasp() {
+		if (!calling_move && !calling_grasp && !calling_moveandgrasp) {
+			calling_moveandgrasp = true;
 		}
 	}
 }

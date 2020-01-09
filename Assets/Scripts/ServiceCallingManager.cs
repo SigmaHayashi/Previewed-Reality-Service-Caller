@@ -170,4 +170,30 @@ public class ServiceCallingManager : MonoBehaviour {
 
 		wait_anything = false;
 	}
+
+	/**************************************************
+	 * Call Service : Move and Grasp
+	 **************************************************/
+	public IEnumerator CallServiceToMoveAndGrasp() {
+		wait_anything = access_db = true;
+		time_access = 0.0f;
+
+		TmsTsMasterRequest request = new TmsTsMasterRequest() {
+			task_id = 8001,
+			robot_id = 2003,
+			object_id = 7001,
+			user_id = 1001
+		};
+		RosSocketClient.ServiceCaller(service_name, request);
+
+		while (access_db) {
+			yield return null;
+		}
+
+		while (success_access || abort_access) {
+			yield return null;
+		}
+
+		wait_anything = false;
+	}
 }
