@@ -14,7 +14,7 @@ public class MainCanvasManager : MonoBehaviour {
 
 	// UI
 	private Button CallService_Move_Button;
-	private Button CallService_Grasp_Button;
+	//private Button CallService_Grasp_Button;
 	private Button CallService_MoveAndGrasp_Button;
 
 	// Startが終わったかどうか
@@ -43,10 +43,10 @@ public class MainCanvasManager : MonoBehaviour {
 
 		// UIを取得・設定
 		CallService_Move_Button = GameObject.Find("Main System/Main Canvas/Vertical/Vertical/Move/Button").GetComponent<Button>();
-		CallService_Grasp_Button = GameObject.Find("Main System/Main Canvas/Vertical/Vertical/Grasp/Button").GetComponent<Button>();
+		//CallService_Grasp_Button = GameObject.Find("Main System/Main Canvas/Vertical/Vertical/Grasp/Button").GetComponent<Button>();
 		CallService_MoveAndGrasp_Button = GameObject.Find("Main System/Main Canvas/Vertical/Vertical/Move and Grasp/Button").GetComponent<Button>();
 		CallService_Move_Button.onClick.AddListener(StartCallServiceMove);
-		CallService_Grasp_Button.onClick.AddListener(StartCallServiceGrasp);
+		//CallService_Grasp_Button.onClick.AddListener(StartCallServiceGrasp);
 		CallService_MoveAndGrasp_Button.onClick.AddListener(StartCallServiceMoveAndGrasp);
 
 		ServiceCallingManager = GameObject.Find("Ros Socket Client").GetComponent<ServiceCallingManager>();
